@@ -1,6 +1,0 @@
-# ignore the template
-w3.css
-# ignore node modules
-node_modules/
-# ignore npm lock file
-package-lock.json
