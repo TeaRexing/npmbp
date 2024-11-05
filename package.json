@@ -11,18 +11,25 @@
     "css:purify": "purifycss public_html/index.css public_html/*.html --min --info --out public_html/index.css",
     "watch:css": "onchange \"src/scss/**/*\" -- npm run build:css",
     "build:css": "npm run css:lint && npm run css:scss && npm run css:autoprefixer",
-    "build:images": "imagemin src/img/* --out-dir=public_html/",
+    "compress:images": "imagemin src/img/**/* --out-dir=public_html/",
     "watch:fonts": "onchange \"src/fonts/*\" -- npm run build:fonts",
     "build:fonts": "copy \"src/fonts/**/*\" public_html",
+    "watch:assets": "onchange \"src/assets/*\" -- npm run build:assets",
+    "build:assets": "copy \"src/assets/**/*\" public_html",
     "build:js": "webpack --mode=production",
     "watch:js": "onchange \"src/js/**/*\" -- webpack --mode=development",
     "build:html": "posthtml -c posthtml.json",
     "watch:html": "onchange \"src/pages/**/*\" -- npm run build:html",
-    "serve": "browser-sync start --server \"public_html\" --files \"public_html\"",
+    "watch:php": "onchange \"src/php/*\" -- npm run build:php",
+    "build:php": "copy \"src/php/*\" public_html",
+    "server:php": "php -S localhost:8080 -t public_html",
+    "server:browsersync": "browser-sync start --proxy \"localhost:8080\" --directory \"public_html\" --files \"public_html\"",
+    "serve": "run-p server:*",
     "watch": "run-p build:* && run-p serve watch:*",
     "build": "run-p build:*",
-    "production": "npm run purge && run-p build:* && npm run css:purify",
-    "purge": "rimraf public_html/"
+    "production": "npm run purge && run-p build:* && npm run compress:images && npm run css:purify",
+    "purge": "rimraf public_html/",
+    "publish": "./sync.sh"
   },
   "keywords": [],
   "author": "Patrick Zempel",
@@ -33,6 +40,7 @@
     "babel-loader": "^8.2.5",
     "browser-sync": "^2.27.10",
     "copy": "^0.3.2",
+    "cssnano": "^7.0.6",
     "eslint": "^8.23.0",
     "eslint-webpack-plugin": "^3.2.0",
     "htmlnano": "^2.0.2",
@@ -53,7 +61,10 @@
     "webpack-cli": "^4.10.0"
   },
   "dependencies": {
+    "cookie-notice": "^1.3.9",
+    "glightbox": "^3.3.0",
     "jquery": "^3.6.1",
-    "jquery-migrate": "^3.4.0"
+    "jquery-migrate": "^3.4.0",
+    "macy": "^2.5.1"
   }
 }
